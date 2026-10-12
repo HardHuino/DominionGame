@@ -4,8 +4,8 @@
 using namespace std;
 class CardPile{
     private:
-    int quantity;
     Card* card;
+    int quantity;
 
     public:
     //Constructor

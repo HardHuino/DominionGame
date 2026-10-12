@@ -1,5 +1,5 @@
 #include "CardPile.hpp"
-CardPile::CardPile(Card card, int quantity): card(card), quantity(quantity) {}
+CardPile::CardPile(Card* card, int quantity): card(card), quantity(quantity) {}
 
 int CardPile::getQuantity(){return this->quantity;}
 
