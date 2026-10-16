@@ -3,6 +3,8 @@
 Card::Card(const std::string& name, int cost)
     : name(name), cost(cost) {}
 
+Card::~Card() {}
+
 std::string Card::getName() const {
     return name;
 }

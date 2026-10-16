@@ -12,11 +12,7 @@ public:
     Card(const std::string& name, int cost);
 
     // Destructeur
-    virtual ~Card() = default;
-
-    virtual bool isTreasure() const;
-    virtual bool isVictory()  const;
-    virtual bool isAction()   const;
+    virtual ~Card();
 
     std::string getName() const;
     int getCost() const;
