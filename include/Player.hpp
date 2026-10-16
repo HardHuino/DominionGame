@@ -10,7 +10,7 @@ class Player {
 private:
     std::string name;
     int actions;
-    int buys;
+    int purchases;
     int coins;
     std::vector<Card*> hand;
     std::vector<Card*> deck;

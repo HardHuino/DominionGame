@@ -1,6 +1,9 @@
 #ifndef CARDPILE_HPP
 #define CARDPILE_HPP
 #include "Card.hpp"
+#include "TreasureCard.hpp"
+#include "VictoryCard.hpp"
+#include "ActionCard.hpp"
 using namespace std;
 class CardPile{
     private:

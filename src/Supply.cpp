@@ -2,7 +2,16 @@
 using namespace std;
 //------TO BE IMPLEMENTED
 void Supply::initializeSupply(int nbOfPlayers){ //Setsup the Game depending on the number of players
-
+    nbOfPlayers=nbOfPlayers;
+    //TreasureCards
+    piles.insert({"Copper", *new CardPile(new TreasureCard("Copper",0,1),10)});
+    piles.insert({"Silver", *new CardPile(new TreasureCard("Silver",3,2),10)});
+    piles.insert({"Gold", *new CardPile(new TreasureCard("Gold",6,3),10)});
+    //VictoryCards
+    piles.insert({"Curse", *new CardPile(new VictoryCard("Curse",0,-1),10)});
+    piles.insert({"Estate", *new CardPile(new VictoryCard("Estate",1,1),10)});
+    piles.insert({"Duchee", *new CardPile(new VictoryCard("Duchee",4,3),10)});
+    piles.insert({"Province", *new CardPile(new VictoryCard("Province",8,6),6)});
 }
 
 CardPile* Supply::getPile(const string& name){
