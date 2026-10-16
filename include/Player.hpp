@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <algorithm> // VERIFIER SI ALGORITHM EXISTE
 
 class Card;
 
@@ -10,17 +11,25 @@ class Player {
 private:
     std::string name;
     int actions;
-    int buys;
+    int purchases;
     int coins;
     std::vector<Card*> hand;
     std::vector<Card*> deck;
     std::vector<Card*> discard;
+    std::vector<Card*> playedCards;
 public:
     // Constructeur
     Player(const std::string& name);
 
     // Destructeur
-    virtual ~Player() = default;
+    virtual ~Player();
+
+    // Getters
+    std::string getName() const;
+    int getActions() const;
+    int getPurchases() const;
+    int getCoins() const;
+    const std::vector<Card*>& getHand() const;
 
     void executeTurn();
     void draw(int numCards);

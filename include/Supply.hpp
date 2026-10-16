@@ -11,6 +11,7 @@ class Supply{
     public:
     void initializeSupply(int numPlayers);
     CardPile* getPile(const string& name);
-    bool checkGameEnd();
+    const map<string, CardPile>& getPiles() const;
+    bool checkGameEnd() const;
 };
 #endif
