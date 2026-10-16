@@ -6,6 +6,9 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
+
+class Card;
 
 class Game {
 private:
@@ -20,7 +23,8 @@ public:
     virtual ~Game() = default;
 
     void startGame();
-    void displayWinner() const;
+
+    const Supply& getSupply() const;
 };
 
 #endif // GAME_HPP

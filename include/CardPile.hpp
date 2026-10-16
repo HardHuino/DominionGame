@@ -16,7 +16,10 @@ class CardPile{
     // Destructeur
     virtual ~CardPile();
 
-    int getQuantity();
+    // Getters
+    Card* getCard() const;
+    int getQuantity() const;
+
     bool isEmpty();
     Card* removeCard(); //Could be just a Card instead of Card* possibly
 };

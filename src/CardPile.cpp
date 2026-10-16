@@ -1,7 +1,13 @@
 #include "CardPile.hpp"
 CardPile::CardPile(Card* card, int quantity): card(card), quantity(quantity) {}
 
-int CardPile::getQuantity(){return this->quantity;}
+CardPile::~CardPile() {
+    delete card; 
+}
+
+Card* CardPile::getCard() const {return this->card;}
+
+int CardPile::getQuantity() const {return this->quantity;}
 
 bool CardPile::isEmpty(){
     if(quantity<=0){return true;}

@@ -14,6 +14,10 @@ public:
     // Destructeur
     virtual ~Card() = default;
 
+    virtual bool isTreasure() const;
+    virtual bool isVictory()  const;
+    virtual bool isAction()   const;
+
     std::string getName() const;
     int getCost() const;
 };

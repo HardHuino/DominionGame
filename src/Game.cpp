@@ -6,7 +6,7 @@ Game::Game(const std::vector<Player>& players, const Supply& supply):players(pla
 
 void Game::startGame(){ //------UNFINISHED
     int nbPlayers=0;
-    while(!(0<nbPlayers<5)){ //Asks for the number of players until a valid number of player(1-4) is entered
+    while(!(0<nbPlayers && nbPlayers<5)){ //Asks for the number of players until a valid number of player(1-4) is entered
         cout<<"Choose the number of players (max 4):"<<endl;
         cin>>nbPlayers;
     }
@@ -20,4 +20,8 @@ void Game::startGame(){ //------UNFINISHED
         //--------TO BE IMPLEMENTED (creating the player instance and adding it to the vector)
         //players.push_back(new Player(playerName));
     }
+}
+
+const Supply& Game::getSupply() const{ //Returns the supply of the game
+    return supply;
 }

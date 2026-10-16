@@ -23,7 +23,7 @@ CardPile* Supply::getPile(const string& name){
     throw "Name not found in Piles"; //Throws an error if the name doesn't match
 }
 
-bool Supply::checkGameEnd(){ //Counts number of empty piles to check if game ends
+bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if game ends
     int nbEmptyPiles=0;
     for (auto& i : piles){ //Runs through all the piles
         if(i.second.getQuantity()<=0){ //Checks if that pile is empty
@@ -40,4 +40,8 @@ bool Supply::checkGameEnd(){ //Counts number of empty piles to check if game end
         return true;
     }
     return false;
+}
+
+const std::map<std::string, CardPile>& Supply::getPiles() const{ //Returns the map of piles
+    return piles;
 }
