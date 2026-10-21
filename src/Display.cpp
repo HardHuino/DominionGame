@@ -17,9 +17,9 @@ static const char* GREY   = "\033[90m";
 
 std::string Display::cardLabel(const Card& card) {
     const char* color = RESET;
-    if (card.isTreasure())     color = YELLOW;
-    else if (card.isVictory()) color = GREEN;
-    else if (card.isAction())  color = BLUE;
+    if (typeid(card) == typeid(TreasureCard))     color = YELLOW;
+    else if (typeid(card) == typeid(VictoryCard)) color = GREEN;
+    else if (typeid(card) == typeid(ActionCard))  color = BLUE;
     return std::string(color) + card.getName() + RESET
          + " (" + std::to_string(card.getCost()) + ")";
 }
