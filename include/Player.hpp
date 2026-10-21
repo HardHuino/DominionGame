@@ -1,6 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include "Supply.hpp"
 #include <vector>
 #include <string>
 #include <algorithm> // VERIFIER SI ALGORITHM EXISTE
@@ -31,7 +32,7 @@ public:
     int getCoins() const;
     const std::vector<Card*>& getHand() const;
 
-    void executeTurn();
+    void executeTurn(Supply supply);
     void draw(int numCards);
     void playActionCard(int cardIndex);
     void buyCard(Card* card);

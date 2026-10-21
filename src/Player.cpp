@@ -45,3 +45,45 @@ const std::vector<Card*>& Player::getHand() const {
     return hand;
 }
 
+void Player::executeTurn(Supply supply){
+    //Play action cards
+
+    // - - - - - Purchases
+    for(auto card : hand){ //Money calculation
+        if(card.isTreasure()){
+            coins+=card.getValue();
+        }
+    }
+    while(purchases>0){ //Allows player to purchase cards
+        cout<<supply.getPiles()<<endl; //Shows the Supply of cards
+        cout<<"You have "<<purchases<<" purchases left. What do you want to buy? (Type in the name)"<<endl<<"-->";
+        string name;
+        cin>>name; //Asks the user which card they want to buy.
+        if(supply.getPile(name).getQuantity()>0){ //If that CardPile still has cards in it :
+            discard.pushback(supply.getPile(name).removeCard()); //Removes the card from the Supply and puts it in the player's discard
+            purchases--; //Decreases nb of purchases left
+        }
+        else{cout<<"That pile is empty"<<endl;} //Otherwise
+    }
+
+    //End of turn
+    discard.pushback(hand);
+    hand.clear();
+    discard.pushback(playedCards);
+    playedCards.clear();
+    //Draws a new hand
+    /*
+    /for(int i=0; i<5; i++){
+        draw(5);
+    }
+    */
+}
+
+Player::draw(int numCards){
+    for(int i=0; i<numCards; i++){
+        if(deck.size()>0){
+            hand.pushback(deck.at(deck.size()-1));
+            deck.remove(deck.at(deck.size()-1));
+        }
+    }
+}

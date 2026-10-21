@@ -15,6 +15,11 @@ bool CardPile::isEmpty(){
 }
 
 Card* CardPile::removeCard(){
-    quantity=quantity-1;
-    return this->card;
+    if(quantity>0){
+        quantity=quantity-1;
+        return this->card;
+    }
+    else{
+        //Throw an error? cause it shouldn't be allowed. TO BE IMPLIMENTED !!!
+    }
 } //Could be just a Card instead of Card* possibly
