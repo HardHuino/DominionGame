@@ -1,25 +1,21 @@
 #include "CardPile.hpp"
-CardPile::CardPile(Card* card, int quantity): card(card), quantity(quantity) {}
 
-CardPile::~CardPile() {
-    delete card; 
+CardPile::CardPile(std::unique_ptr<Card> model) : model(std::move(model)) {}
+
+
+void CardPile::addCard(std::unique_ptr<Card> card) {
+    cards.push_back(std::move(card));
 }
 
-Card* CardPile::getCard() const {return this->card;}
+std::unique_ptr<Card> CardPile::takeCard() {
+    if (cards.empty()) return nullptr;
+    std::unique_ptr<Card> card = std::move(cards.back());   // the card leaves the pile, so we use std::move to transfer ownership of the unique_ptr
+    cards.pop_back();
+    return card;
+} // removed the exeption throw, now returns nullptr if the pile is empty
 
-int CardPile::getQuantity() const {return this->quantity;}
-
-bool CardPile::isEmpty(){
-    if(quantity<=0){return true;}
-    else{return false;}
-}
-
-Card* CardPile::removeCard(){
-    if(quantity>0){
-        quantity=quantity-1;
-        return this->card;
-    }
-    else{
-        //Throw an error? cause it shouldn't be allowed. TO BE IMPLIMENTED !!!
-    }
-} //Could be just a Card instead of Card* possibly
+// Getters
+const Card& CardPile::getModel() const { return *model; }
+std::string CardPile::getName() const { return model->getName(); }
+int CardPile::getQuantity() const { return static_cast<int>(cards.size()); }
+bool CardPile::isEmpty() const { return cards.empty(); }

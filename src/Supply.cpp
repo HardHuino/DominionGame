@@ -1,26 +1,40 @@
 #include "Supply.hpp"
+#include "TreasureCard.hpp"
+#include "VictoryCard.hpp"
+
+#include <cctype>
+#include <stdexcept>
+#include <utility>
+
 using namespace std;
-//------TO BE IMPLEMENTED
-void Supply::initializeSupply(int nbOfPlayers){ //Setsup the Game depending on the number of players
-    nbOfPlayers=nbOfPlayers;
-    //TreasureCards
-    piles.insert({"Copper", *new CardPile(new TreasureCard("Copper",0,1),10)});
-    piles.insert({"Silver", *new CardPile(new TreasureCard("Silver",3,2),10)});
-    piles.insert({"Gold", *new CardPile(new TreasureCard("Gold",6,3),10)});
-    //VictoryCards
-    piles.insert({"Curse", *new CardPile(new VictoryCard("Curse",0,-1),10)});
-    piles.insert({"Estate", *new CardPile(new VictoryCard("Estate",1,1),10)});
-    piles.insert({"Duchee", *new CardPile(new VictoryCard("Duchee",4,3),10)});
-    piles.insert({"Province", *new CardPile(new VictoryCard("Province",8,6),6)});
+
+template <class T, class... Args>
+void Supply::addPile(int quantity, Args... args) {
+    CardPile pile(std::unique_ptr<Card>(new T(args...)));
+    for (int i = 0; i < quantity; ++i)
+        pile.addCard(std::unique_ptr<Card>(new T(args...)));
+    const std::string name = pile.getName();
+    piles.emplace(name, std::move(pile));
 }
 
-CardPile* Supply::getPile(const string& name){
-    for (auto& i : piles){ //Searches through all of the pile (the map containing names and their associated CardPile)
-        if(i.first==name){ //If name matches
-            return &i.second; //Returns the pointer to the CardPile
-        }
-    }
-    throw "Name not found in Piles"; //Throws an error if the name doesn't match
+std::unique_ptr<Card> Supply::takeCard(const std::string& name) {
+    CardPile* pile = getPile(name);
+    return pile ? pile->takeCard() : nullptr;
+}
+
+void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on the number of players
+    const int victory = (numPlayers == 2) ? 8 : 12;
+
+    // Treasure cards
+    addPile<TreasureCard>(60, std::string("Copper"), 0, 1);
+    addPile<TreasureCard>(40, std::string("Silver"), 3, 2);
+    addPile<TreasureCard>(30, std::string("Gold"),   6, 3);
+
+    // Victory cards
+    addPile<VictoryCard>(victory, std::string("Estate"),   2,  1);
+    addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3);
+    addPile<VictoryCard>(victory, std::string("Province"), 8,  6);
+    addPile<VictoryCard>(30, std::string("Curse"),    0, -1);
 }
 
 bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if game ends
@@ -42,6 +56,15 @@ bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if ga
     return false;
 }
 
-const std::map<std::string, CardPile>& Supply::getPiles() const{ //Returns the map of piles
-    return piles;
+// Getters
+
+CardPile* Supply::getPile(const string& name){
+    for (auto& i : piles){ //Searches through all of the pile (the map containing names and their associated CardPile)
+        if(i.first==name){ //If name matches
+            return &i.second; //Returns the pointer to the CardPile
+        }
+    }
+    throw "Name not found in Piles"; //Throws an error if the name doesn't match
 }
+
+const std::map<std::string, CardPile>& Supply::getPiles() const{    return piles;   } //Returns the map of piles

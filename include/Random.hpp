@@ -1,0 +1,13 @@
+#ifndef RANDOM_HPP
+#define RANDOM_HPP
+
+#include <random>
+
+// Random generator for the game
+// in order to reproduce the same game in debug : rng().seed(42);
+inline std::mt19937& rng() {
+    static std::mt19937 gen{std::random_device{}()};
+    return gen;
+}
+
+#endif // RANDOM_HPP

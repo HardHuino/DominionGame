@@ -11,6 +11,8 @@ private:
 public:
     VictoryCard(const std::string& name, int cost, int victoryPoints);
 
+    bool isVictory() const override;
+
     int getVictoryPoints() const;
 };
 

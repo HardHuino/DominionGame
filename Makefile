@@ -11,7 +11,7 @@
 
 
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++17 -Iinclude
+CXXFLAGS = -Wall -Wextra -Werror -std=c++11 -Iinclude
 SRC_DIR = src
 INC_DIR = include
 BUILD_DIR = build

@@ -11,6 +11,9 @@ class Game;
 class ActionCard : public Card {
 public:
     ActionCard(const std::string& name, int cost);
+
+    bool isAction() const override;
+
     virtual void effect(Player& player, Game& game) = 0;
 };
 

@@ -17,12 +17,13 @@ private:
     int activePlayerIndex;
 public:
     // Constructeur
-    Game(const std::vector<Player>& players, const Supply& supply);
+    Game();
 
     // Destructeur
     virtual ~Game() = default;
 
     void startGame();
+    void playTurn();
 
     const Supply& getSupply() const;
 };

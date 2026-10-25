@@ -1,8 +1,9 @@
 #include "Game.hpp"
 #include <iostream>
 using namespace std;
+
 // Constructeur
-Game::Game(const std::vector<Player>& players, const Supply& supply):players(players), supply(supply){}
+Game::Game() : activePlayerIndex(0) {}
 
 void Game::startGame(){ //------UNFINISHED
     int nbPlayers=0;
@@ -17,19 +18,17 @@ void Game::startGame(){ //------UNFINISHED
     //Creates the players and stores them in the players vector
     for(int i=0; i<nbPlayers; i++){
         string playerName;
-        cout<<"What's your name player "<<i+1<<" ?"<<endl; //Potentially to put in DISPLAY
-        cin>>playerName;
+        std::cout<<"What's your name player "<<i+1<<" ?"<<endl; //Potentially to put in DISPLAY
+        std::cin>>playerName;
         //creates the player instance and adds it to the vector
-        players.push_back(new Player(playerName));
+        players.push_back(Player(playerName, supply));
     }
 
     //Main game loop
     int playerIndex=0;
     while(!supply.checkGameEnd()){
-        players.at(playerIndex).executeTurn(&supply);//Runs the player's turn, supply added for purchases
+        players.at(playerIndex).executeTurn(supply);//Runs the player's turn, supply added for purchases
     }
 }
 
-const Supply& Game::getSupply() const{ //Returns the supply of the game
-    return supply;
-}
+const Supply& Game::getSupply() const{  return supply;  } //Returns the supply of the game

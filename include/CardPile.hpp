@@ -1,26 +1,30 @@
 #ifndef CARDPILE_HPP
 #define CARDPILE_HPP
+
 #include "Card.hpp"
-#include "TreasureCard.hpp"
-#include "VictoryCard.hpp"
-#include "ActionCard.hpp"
+#include <memory>
+#include <string>
+#include <vector>
+
 using namespace std;
+
 class CardPile{
     private:
-    Card* card;
-    int quantity;
+    std::unique_ptr<Card> model; // model=type of card in the pile
+    std::vector<std::unique_ptr<Card> > cards; // Vector of unique pointers to Card objects representing the cards in the pile
 
     public:
     //Constructor
-    CardPile(Card* card, int quantity);
-    // Destructeur
-    virtual ~CardPile();
+    explicit CardPile(std::unique_ptr<Card> model);
+
+    void addCard(std::unique_ptr<Card> card); //Adds a card to the pile
+    std::unique_ptr<Card> takeCard(); //Takes a card from the pile
 
     // Getters
-    Card* getCard() const;
+    const Card& getModel() const;
+    std::string getName() const;
     int getQuantity() const;
-
-    bool isEmpty();
-    Card* removeCard(); //Could be just a Card instead of Card* possibly
+    bool isEmpty() const;
 };
+
 #endif

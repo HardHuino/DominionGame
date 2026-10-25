@@ -11,6 +11,8 @@ private:
 public:
     TreasureCard(const std::string& name, int cost, int value);
 
+    bool isTreasure() const override;
+
     int getValue() const;
 };
 
