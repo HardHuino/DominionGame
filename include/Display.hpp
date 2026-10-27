@@ -13,15 +13,16 @@ public:
     static void showTurnHeader(const Player& player);
     static void showHand(const Player& player);
     static void showSupply(const Supply& supply, int coins);
-    static void showStatus(const Player& player);      // actions / achats / pieces
+    static void showStatus(const Player& player);      // actions / purchases / coins
     static void showMessage(const std::string& text);
     static void showWinner(const std::vector<Player>& players);
 
-    // Saisies securisees
-    static int  askChoice(const std::string& prompt, int min, int max);
+    // safe inputs
+    static std::string askLine(const std::string& prompt);
+    static int askChoice(const std::string& prompt, int min, int max);
 
 private:
-    static std::string cardLabel(const Card& card);    // nom colore + cout
+    static std::string cardLabel(const Card& card);    // colored name + cout
 };
 
 #endif

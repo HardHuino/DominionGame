@@ -49,7 +49,7 @@ void Display::showSupply(const Supply& supply, int coins) {
     for (const auto& pair : piles) {
         const Card& c = pair.second.getModel();
         bool buyable = pair.second.getQuantity() > 0 && c.getCost() <= coins;
-        std::cout << (buyable ? "" : GREY)
+        std::cout << (buyable ? "" : GREY) // dim the text if the card is not buyable
                   << "  [" << pair.first << "] " << cardLabel(c)
                   << " x" << pair.second.getQuantity() << RESET << "\n";
     }
@@ -57,4 +57,41 @@ void Display::showSupply(const Supply& supply, int coins) {
 
 void Display::showMessage(const std::string& text) {
     std::cout << text << "\n";
+}
+
+void Display::showWinner(const std::vector<Player>& players) {
+    std::cout << "\n========== FIN DE PARTIE ==========\n";
+    int best = players.empty() ? 0 : players[0].countVictoryPoints();
+    for (const Player& p : players) {
+        int vp = p.countVictoryPoints();
+        std::cout << "  " << p.getName() << " : " << vp << " points de victoire\n";
+        if (vp > best) best = vp;
+    }
+    std::cout << "Gagnant(s) :";
+    for (const Player& p : players)
+        if (p.countVictoryPoints() == best) std::cout << " " << p.getName();
+    std::cout << "\n";
+}
+
+std::string Display::askLine(const std::string& prompt) {
+    std::cout << prompt << std::flush;
+    std::string line;
+    if (!std::getline(std::cin, line)) {               // Ctrl-D ou fin du fichier d'entree
+        std::cout << "\n[fin de l'entree : arret]\n";
+        std::exit(0);
+    }
+    std::size_t b = line.find_first_not_of(" \t\r");
+    if (b == std::string::npos) return "";
+    std::size_t e = line.find_last_not_of(" \t\r");
+    return line.substr(b, e - b + 1);
+}
+
+int Display::askChoice(const std::string& prompt, int min, int max) {
+    while (true) {
+        std::string line = askLine(prompt);
+        char* end = nullptr;
+        long v = std::strtol(line.c_str(), &end, 10);
+        if (!line.empty() && *end == '\0' && v >= min && v <= max) return static_cast<int>(v);
+        std::cout << "Entree invalide : entrez un nombre entre " << min << " et " << max << ".\n";
+    }
 }

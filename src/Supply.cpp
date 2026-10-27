@@ -17,6 +17,12 @@ void Supply::addPile(int quantity, Args... args) {
     piles.emplace(name, std::move(pile));
 }
 
+static std::string toLower(std::string s) { // Converts a string to lowercase
+    for (std::size_t i = 0; i < s.size(); ++i)
+        s[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(s[i])));
+    return s;
+}
+
 std::unique_ptr<Card> Supply::takeCard(const std::string& name) {
     CardPile* pile = getPile(name);
     return pile ? pile->takeCard() : nullptr;
@@ -40,31 +46,23 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
 bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if game ends
     int nbEmptyPiles=0;
     for (auto& i : piles){ //Runs through all the piles
-        if(i.second.getQuantity()<=0){ //Checks if that pile is empty
-            //-------TO BE IMPLEMENTED
-            if(i.first==""){ //If the pile is empty and it's the one pile that ends the game immediately
-                return true; 
-            }
-            else{ //Otherwise just adds one to the number of empty piles
-                nbEmptyPiles+=1;
-            }
+        if(i.second.isEmpty()){ //Checks if that pile is empty
+            nbEmptyPiles++; //Increments the number of empty piles
         }
     }
-    if (nbEmptyPiles>=3){ //Checks if there are at least 3 empty piles
-        return true;
-    }
-    return false;
+    return piles.at("Province").isEmpty() || nbEmptyPiles >= 3;
 }
 
 // Getters
 
 CardPile* Supply::getPile(const string& name){
-    for (auto& i : piles){ //Searches through all of the pile (the map containing names and their associated CardPile)
-        if(i.first==name){ //If name matches
-            return &i.second; //Returns the pointer to the CardPile
+    const std::string wanted = toLower(name);
+    for (auto& p : piles) { //Searches through all of the pile (the map containing names and their associated CardPile)
+        if (toLower(p.first) == wanted){ //If name matches
+            return &p.second; //Returns the pointer to the CardPile
         }
     }
-    throw "Name not found in Piles"; //Throws an error if the name doesn't match
+    return nullptr; //return nullptr if the name doesn't match
 }
 
 const std::map<std::string, CardPile>& Supply::getPiles() const{    return piles;   } //Returns the map of piles

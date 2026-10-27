@@ -20,8 +20,9 @@ Player::Player(const std::string& name, Supply& supply) : name(name), actions(1)
     for (int i = 0; i < 3; ++i) // Estate are NOT taken from the Supply, so we can create them directly
         deck.push_back(std::unique_ptr<Card>(new VictoryCard("Estate", 2, 1)));
     std::shuffle(deck.begin(), deck.end(), rng());
+
     // Draw the initial hand of 5 cards
-    //draw(5);
+    draw(5);
 }
 
 // Player::~Player() {
@@ -73,9 +74,9 @@ void Player::executeTurn(Supply& supply){
         Display::showSupply(supply, coins); //Shows the Supply of cards
         std::cout<<"You have "<<purchases<<" purchases left. What do you want to buy? (Type in the name)"<<endl<<"-->";
         string name;
-        std::cin>>name; //Asks the user which card they want to buy.
+        name = Display::askLine(""); //Asks the user which card they want to buy.
         if(!buyCard(supply, name)) { //Attempts to buy the card
-            std::cout<<"That pile is empty"<<endl; //Otherwise
+            std::cout<<"Failed to buy the card."<<endl; //Otherwise
         }
     
         // ---- Ajustment Phase (end of turn)
@@ -133,6 +134,20 @@ bool Player::buyCard(Supply& supply, const std::string& cardName) {
 
 void Player::gain(std::unique_ptr<Card> card) { // useful for later with special action cards
     if (card) discard.push_back(std::move(card));
+}
+
+int Player::countVictoryPoints() const {
+    int totalVP = 0;
+    for (const auto& card : hand) {
+        if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
+    }
+    for (const auto& card : deck) {
+        if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
+    }
+    for (const auto& card : discard) {
+        if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
+    }
+    return totalVP; // TODO : add support for special cards that give victory points based on other conditions (e.g., Gardens, Duke, etc.)
 }
 
 // Getters
