@@ -90,20 +90,6 @@ void Player::executeTurn(Supply& supply){
     */
 }
 
-void Player::draw(int numCards){
-    for(int i=0; i<numCards; i++){
-        if (deck.empty() && !discard.empty()) {
-            // empty deck -> Shuffle the discard pile into the deck
-            std::shuffle(discard.begin(), discard.end(), rng());
-            deck.swap(discard);
-        }
-        if(deck.size()>0){
-            hand.push_back(std::move(deck.back())); // std::move allow to cannibalize the unique_ptr from the deck to the hand
-            deck.pop_back();
-        }
-    }
-}
-
 bool Player::buyCard(Supply& supply, const std::string& cardName) {
     CardPile* pile = supply.getPile(cardName);
     if (!pile) {
@@ -149,6 +135,68 @@ int Player::countVictoryPoints() const {
     }
     return totalVP; // TODO : add support for special cards that give victory points based on other conditions (e.g., Gardens, Duke, etc.)
 }
+
+std::unique_ptr<Card> Player::drawCard() { // needed to be separated from draw function because some card need to be seen before going anywhere
+    if (deck.empty() && !discard.empty()) {
+        // empty deck -> Shuffle the discard pile into the deck
+        std::shuffle(discard.begin(), discard.end(), rng());
+        deck.swap(discard);
+    }
+    if (deck.empty()) return nullptr; // no card left anywhere
+    std::unique_ptr<Card> card = std::move(deck.back()); // the top of the deck is the back of the vector
+    deck.pop_back();
+    return card;
+}
+
+void Player::draw(int numCards){
+    for(int i=0; i<numCards; i++){
+        std::unique_ptr<Card> card = drawCard();
+        if (!card) break; // nothing left to draw
+        hand.push_back(std::move(card)); // std::move allow to cannibalize the unique_ptr from the deck to the hand
+    }
+}
+
+std::unique_ptr<Card> Player::removeFromHand(int index) {
+    if (index < 0 || index >= static_cast<int>(hand.size())) return nullptr;
+    std::unique_ptr<Card> card = std::move(hand[index]);
+    hand.erase(hand.begin() + index);
+    return card;
+}
+
+std::unique_ptr<Card> Player::removeFromPlayed(const Card* card) {
+    for (std::size_t i = 0; i < playedCards.size(); i++) {
+        if (playedCards[i].get() == card) {
+            std::unique_ptr<Card> found = std::move(playedCards[i]);
+            playedCards.erase(playedCards.begin() + i);
+            return found;
+        }
+    }
+    return nullptr;
+}
+
+void Player::addToHand(std::unique_ptr<Card> card)   { if (card) hand.push_back(std::move(card)); }
+void Player::addToPlayed(std::unique_ptr<Card> card) { if (card) playedCards.push_back(std::move(card)); }
+void Player::putOnDeck(std::unique_ptr<Card> card)   { if (card) deck.push_back(std::move(card)); }
+void Player::discardCard(std::unique_ptr<Card> card) { if (card) discard.push_back(std::move(card)); }
+
+void Player::discardFromHand(int index) {
+    discardCard(removeFromHand(index));
+}
+
+void Player::discardDeck() {
+    for (std::unique_ptr<Card>& c : deck) discard.push_back(std::move(c));
+    deck.clear();
+}
+
+bool Player::hasActionInHand() const {
+    for (const std::unique_ptr<Card>& c : hand)
+        if (c->isAction()) return true;
+    return false;
+}
+
+void Player::addActions(int numActions) { actions += numActions; }
+void Player::addPurchases(int numPurchases) { purchases += numPurchases; }
+void Player::addCoins(int numCoins) { coins += numCoins; }
 
 // Getters
 

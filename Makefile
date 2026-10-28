@@ -9,21 +9,20 @@
 # .cpp en .o dans le dossier build/ qui est créé automatiquement
 # Les headers sont inclus via le flag -Iinclude
 
-
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++11 -Iinclude
+CXXFLAGS = -Wall -Wextra -Werror -std=c++11 -Iinclude -Iinclude/ActionCards
 SRC_DIR = src
 INC_DIR = include
 BUILD_DIR = build
 
 TARGET = $(BUILD_DIR)/dominion	# nom de la cible
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/ActionCards/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o, $(SRCS))
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $< -c -o $@
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJS)
 	$(CXX) $^ -o $@
@@ -35,4 +34,3 @@ run: $(TARGET)
 
 clean:
 	rm -rf $(BUILD_DIR)
-

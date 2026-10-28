@@ -4,9 +4,11 @@
 #include "Card.hpp"
 
 #include <string>
+#include <vector>
 
 class Player;
 class Game;
+class CardPile;
 
 class ActionCard : public Card {
 public:

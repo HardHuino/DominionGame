@@ -27,11 +27,27 @@ public:
     // virtual ~Player();
 
     void executeTurn(Supply& supply);
-    void draw(int numCards);
     void playActionCard(int cardIndex);
     bool buyCard(Supply& supply, const std::string& cardName); // supply -> discard, returns true if the purchase was successful, false otherwise
     void gain(std::unique_ptr<Card> card); // any sources -> discard, adds a card to the player's discard pile
     int countVictoryPoints() const;
+
+    void draw(int numCards);
+    void addActions(int numActions);
+    void addPurchases(int numPurchases);
+    void addCoins(int numCoins);
+
+    // Primitives function used by action cards
+    std::unique_ptr<Card> drawCard();                       // deck -> caller (reshuffles the discard if needed), nullptr if no card left at all
+    std::unique_ptr<Card> removeFromHand(int index);        // hand -> caller, nullptr if the index is invalid
+    std::unique_ptr<Card> removeFromPlayed(const Card* card); // played cards -> caller, nullptr if the card is not there
+    void addToHand(std::unique_ptr<Card> card);             // caller -> hand
+    void addToPlayed(std::unique_ptr<Card> card);           // caller -> played cards
+    void putOnDeck(std::unique_ptr<Card> card);             // caller -> top of the deck
+    void discardCard(std::unique_ptr<Card> card);           // caller -> discard pile
+    void discardFromHand(int index);                        // hand -> discard pile
+    void discardDeck();                                     // whole deck -> discard pile
+    bool hasActionInHand() const;
 
     // Getters
     std::string getName() const;

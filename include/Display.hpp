@@ -10,6 +10,8 @@ class Supply;
 
 class Display {
 public:
+    static std::string cardLabel(const Card& card);    // colored name + cout
+
     static void showTurnHeader(const Player& player);
     static void showHand(const Player& player);
     static void showSupply(const Supply& supply, int coins);
@@ -20,9 +22,6 @@ public:
     // safe inputs
     static std::string askLine(const std::string& prompt);
     static int askChoice(const std::string& prompt, int min, int max);
-
-private:
-    static std::string cardLabel(const Card& card);    // colored name + cout
 };
 
 #endif
