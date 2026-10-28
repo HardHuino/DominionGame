@@ -1,7 +1,7 @@
 #include "VictoryCard.hpp"
 
-VictoryCard::VictoryCard(const std::string& name, int cost, int victoryPoints)
-    : Card(name, cost), victoryPoints(victoryPoints) {}
+VictoryCard::VictoryCard(const std::string& name, int cost, int victoryPoints, bool isGarden)
+    : Card(name, cost), victoryPoints(victoryPoints), isGarden(isGarden) {}
 
 bool VictoryCard::isVictory() const {
     return true;
@@ -9,4 +9,8 @@ bool VictoryCard::isVictory() const {
 
 int VictoryCard::getVictoryPoints() const {
     return victoryPoints;
+}
+
+bool VictoryCard::getIsGarden() const {
+    return isGarden;
 }

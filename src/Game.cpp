@@ -6,7 +6,7 @@ using namespace std;
 // Constructeur
 Game::Game() : activePlayerIndex(0) {}
 
-void Game::startGame(){ //------UNFINISHED
+void Game::startGame(){
     int nbPlayers=0;
     int fastMode=false;
     // while(!(0<nbPlayers && nbPlayers<5)){ //Asks for the number of players until a valid number of player(1-4) is entered
@@ -15,7 +15,7 @@ void Game::startGame(){ //------UNFINISHED
     // } // remplaced by the Display::askChoice function to avoid code duplication and to have a more user-friendly input handling
 
     nbPlayers = Display::askChoice("Nombre de joueurs (2-4) : ", 2, 4);
-    fastMode = Display::askChoice("Do you want to play in FastMode? (0 for no, 1 for yes)", 0, 1); //Using the askChoice since already coded
+    fastMode = Display::askChoice("Do you want to play in FastMode? (0 for no, 1 for yes) : ", 0, 1); //Using the askChoice since already coded
 
     // 1. Initializes the supply of cards (i.e. piles of cards in the middle of the board)
     supply.initializeSupply(nbPlayers); 
@@ -34,7 +34,7 @@ void Game::startGame(){ //------UNFINISHED
         players.push_back(Player(name, supply));
     }
 
-    supply.makeFastMode((bool)fastMode); //Casting to bool directly as fastMode should only ever be a value of 0 or 1
+    supply.makeFastMode(static_cast<bool>(fastMode)); //Casting to bool directly as fastMode should only ever be a value of 0 or 1
 
     //Main game loop
     activePlayerIndex = 0;

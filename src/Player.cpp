@@ -124,6 +124,7 @@ void Player::gain(std::unique_ptr<Card> card) { // useful for later with special
 
 int Player::countVictoryPoints() const {
     int totalVP = 0;
+
     for (const auto& card : hand) {
         if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
     }
@@ -133,6 +134,20 @@ int Player::countVictoryPoints() const {
     for (const auto& card : discard) {
         if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
     }
+    
+    /* 1st attempt at garden
+    for (std::unique_ptr<Card>& c : hand) deck.push_back(std::move(c));
+    for (std::unique_ptr<Card>& c : discard) deck.push_back(std::move(c));
+    hand.clear();
+    discard.clear();
+    int nbGardens = 0; //For scoring with gardens
+    for (const auto& card : deck) {
+        if (card->isVictory()){
+            if (static_cast<VictoryCard*>(card.get())->getIsGarden()) nbGardens++;
+            else totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
+        }
+    }
+    totalVP += floor(nbGardens*0.1*deck.size());*/
     return totalVP; // TODO : add support for special cards that give victory points based on other conditions (e.g., Gardens, Duke, etc.)
 }
 
