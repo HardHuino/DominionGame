@@ -19,3 +19,8 @@ const Card& CardPile::getModel() const { return *model; }
 std::string CardPile::getName() const { return model->getName(); }
 int CardPile::getQuantity() const { return static_cast<int>(cards.size()); }
 bool CardPile::isEmpty() const { return cards.empty(); }
+
+// Setters
+void CardPile::setQuantity(int quantity) {
+    cards.resize(quantity);
+}

@@ -25,6 +25,9 @@ class CardPile{
     std::string getName() const;
     int getQuantity() const;
     bool isEmpty() const;
+
+    // Setters
+    void setQuantity(int quantity);
 };
 
 #endif

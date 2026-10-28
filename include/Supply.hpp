@@ -14,6 +14,8 @@ private:
 public:
     void initializeSupply(int numPlayers);
 
+    void makeFastMode(bool fastMode);
+
     std::unique_ptr<Card> takeCard(const std::string& name); // nullptr if not found or empty
 
     bool checkGameEnd() const;

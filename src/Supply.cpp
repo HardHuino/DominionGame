@@ -30,7 +30,6 @@ std::unique_ptr<Card> Supply::takeCard(const std::string& name) {
 
 void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on the number of players
     const int victory = (numPlayers == 2) ? 8 : 12;
-
     // Treasure cards
     addPile<TreasureCard>(60, std::string("Copper"), 0, 1);
     addPile<TreasureCard>(40, std::string("Silver"), 3, 2);
@@ -42,6 +41,14 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
     addPile<VictoryCard>(victory, std::string("Province"), 8,  6);
     addPile<VictoryCard>(30, std::string("Curse"),    0, -1);
 }
+
+void Supply::makeFastMode(bool fastMode){ //Makes the game much faster (no matter which group of cards are in play)
+    if(fastMode){ 
+        for (auto& i : piles){ //Runs through all the piles
+            i.second.setQuantity(1); //Sets the quantity of cards in every pile to 1
+        }
+    }
+};
 
 bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if game ends
     int nbEmptyPiles=0;

@@ -8,15 +8,17 @@ Game::Game() : activePlayerIndex(0) {}
 
 void Game::startGame(){ //------UNFINISHED
     int nbPlayers=0;
+    int fastMode=false;
     // while(!(0<nbPlayers && nbPlayers<5)){ //Asks for the number of players until a valid number of player(1-4) is entered
     //     cout<<"Choose the number of players (max 4):"<<endl;
     //     cin>>nbPlayers;
     // } // remplaced by the Display::askChoice function to avoid code duplication and to have a more user-friendly input handling
 
     nbPlayers = Display::askChoice("Nombre de joueurs (2-4) : ", 2, 4);
+    fastMode = Display::askChoice("Do you want to play in FastMode? (0 for no, 1 for yes)", 0, 1); //Using the askChoice since already coded
 
     // 1. Initializes the supply of cards (i.e. piles of cards in the middle of the board)
-    supply.initializeSupply(nbPlayers);
+    supply.initializeSupply(nbPlayers); 
 
     // 2. Creates the players and stores them in the players vector
     for(int i=0; i<nbPlayers; i++){
@@ -31,6 +33,8 @@ void Game::startGame(){ //------UNFINISHED
         //creates the player instance and adds it to the vector
         players.push_back(Player(name, supply));
     }
+
+    supply.makeFastMode((bool)fastMode); //Casting to bool directly as fastMode should only ever be a value of 0 or 1
 
     //Main game loop
     activePlayerIndex = 0;
