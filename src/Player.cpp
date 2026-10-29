@@ -243,6 +243,13 @@ bool Player::hasActionInHand() const {
     return false;
 }
 
+int Player::indexCardInHand(std::unique_ptr<Card> card) const{
+    for (std::size_t i=0; i<hand.size(); i++){
+        if (hand.at(i)->getName()==card->getName()){return i;}
+    }
+    return -1;
+}
+
 void Player::addActions(int numActions) { actions += numActions; }
 void Player::addPurchases(int numPurchases) { purchases += numPurchases; }
 void Player::addCoins(int numCoins) { coins += numCoins; }

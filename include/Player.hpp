@@ -49,7 +49,6 @@ public:
     void discardCard(std::unique_ptr<Card> card);           // caller -> discard pile
     void discardFromHand(int index);                        // hand -> discard pile
     void discardDeck();                                     // whole deck -> discard pile
-    bool hasActionInHand() const;
 
     // Getters
     std::string getName() const;
@@ -59,6 +58,8 @@ public:
     const CardList& getHand() const;
     int getDeckSize() const;
     int getDiscardSize() const;
+    bool hasActionInHand() const;
+    int indexCardInHand(std::unique_ptr<Card> card) const;
 };
 
 #endif // PLAYER_HPP

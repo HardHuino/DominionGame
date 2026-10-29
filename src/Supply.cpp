@@ -1,10 +1,27 @@
 #include "Supply.hpp"
 #include "TreasureCard.hpp"
 #include "VictoryCard.hpp"
+#include "ActionCards/Chapel.hpp"
+#include "ActionCards/Feast.hpp"
+#include "ActionCards/Laboratory.hpp"
+#include "ActionCards/Moat.hpp"
+#include "ActionCards/Thief.hpp"
+#include "ActionCards/Village.hpp"
+#include "ActionCards/Witch.hpp"
+#include "Workshop.hpp"
+#include "Woodcutter.hpp"
+#include "Smithy.hpp"
+#include "Mine.hpp"
+#include "Market.hpp"
+#include "Militia.hpp"
+#include "Remodel.hpp"
+#include "Village.hpp"
+#include "Cellar.hpp"
 
 #include <cctype>
 #include <stdexcept>
 #include <utility>
+
 
 using namespace std;
 
@@ -40,7 +57,19 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
     addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3, false);
     addPile<VictoryCard>(victory, std::string("Province"), 8,  6, false);
     addPile<VictoryCard>(30, std::string("Curse"),    0, -1, false);
-    addPile<VictoryCard>(12, std::string("Garden"),    0, 0, true);
+    addPile<VictoryCard>(12, std::string("Garden"),    0, 0, true); //Gardens
+
+    //Action Cards (for beginer game)
+    addPile<Workshop>(10);
+    addPile<Woodcutter>(10);
+    addPile<Mine>(10);
+    addPile<Moat>(10);
+    addPile<Market>(10);
+    addPile<Militia>(10);
+    addPile<Smithy>(10);
+    addPile<Remodel>(10);
+    addPile<Village>(10);
+    addPile<Cellar>(10);
 }
 
 void Supply::makeFastMode(bool fastMode){ //Makes the game much faster (no matter which group of cards are in play)

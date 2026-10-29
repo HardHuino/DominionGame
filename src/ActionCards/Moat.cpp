@@ -7,3 +7,5 @@ Moat::Moat() : ActionCard("Moat", 4) {}
 void Moat::effect(Player& player, Game&) {
     player.draw(2);
 }
+
+bool Moat::blocksAttack() const {return true;}

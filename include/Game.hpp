@@ -28,6 +28,9 @@ public:
 
     void trashCard(std::unique_ptr<Card> card);
 
+    // lists the opponents of the attacker that aren't protected by a reaction card (moat)
+    std::vector<Player*> getAttackTargets(Player& attacker);
+
     const Supply& getSupply() const;
     Supply& getSupply();
     std::vector<Player>& getPlayers();

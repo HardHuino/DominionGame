@@ -15,5 +15,4 @@ void Bureaucrat::effect(Player& player, Game& game) {
         Display::showMessage("La pile Silver est vide.");
     }
 
-    
 }

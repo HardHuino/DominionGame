@@ -10,7 +10,7 @@ Militia::Militia() : ActionCard("Militia", 4) {}
 void Militia::effect(Player& player, Game& game) {
     player.addCoins(2);
 
-    for (Player* target : getAttackTargets(player, game)) {
+    for (Player* target : game.getAttackTargets(player)) {
         while (target->getHand().size() > 3) {
             int index = chooseFromHand(*target, target->getName() + " : defaussez une carte (3 cartes maximum en main)", Choice::Must);
             if (index < 0) break;

@@ -40,8 +40,6 @@ protected:
     // returns nullptr if no pile is eligible
     static CardPile* chooseFromSupply(Game& game, const std::string& prompt, const CardFilter& filter);
 
-    // lists the opponents of the attacker that aren't protected by a reaction card (moat)
-    static std::vector<Player*> getAttackTargets(Player& attacker, Game& game);
 };
 
 #endif // ACTION_CARD_HPP

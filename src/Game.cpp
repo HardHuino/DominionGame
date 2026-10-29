@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Display.hpp"
 #include <iostream>
+#include "Moat.hpp"
 using namespace std;
 
 // Constructeur
@@ -51,6 +52,22 @@ void Game::startGame(){
 
 void Game::trashCard(std::unique_ptr<Card> card) {
     if (card) trash.push_back(std::move(card)); // the trash keeps the card alive (a played Throne Room may still point to it)
+}
+
+std::vector<Player*> Game::getAttackTargets(Player& attacker) {
+    std::vector<Player*> targets;
+    for (Player& other : players) {
+        if (&other == &attacker) continue; //checks not the attacking player
+        else if(other.indexCardInHand(std::unique_ptr<Moat>()) != -1){ //Checks if player has moat and wants to use
+            int choice = Display::askChoice(other.getName()+", do you want to use your moat card? (0 : no, 1 : yes) : ",0,1);
+            if(static_cast<bool>(choice)){
+                Display::showMessage(other.getName()+ " defends against the attack!");
+                continue;
+            }
+        }
+        targets.push_back(&other); //Otherwise adds player to targets
+    }
+    return targets;
 }
 
 const Supply& Game::getSupply() const{  return supply;  } //Returns the supply of the game

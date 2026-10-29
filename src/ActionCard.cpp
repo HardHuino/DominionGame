@@ -6,6 +6,7 @@
 #include "Player.hpp"
 #include "Supply.hpp"
 
+
 ActionCard::ActionCard(const std::string& name, int cost)
     : Card(name, cost) {}
 
@@ -57,12 +58,4 @@ CardPile* ActionCard::chooseFromSupply(Game& game, const std::string& prompt, co
                              + " x" + std::to_string(options[i]->getQuantity()));
     int choice = Display::askChoice("Votre choix : ", 1, static_cast<int>(options.size()));
     return options[choice - 1];
-}
-
-std::vector<Player*> ActionCard::getAttackTargets(Player& attacker, Game& game) {
-    std::vector<Player*> targets;
-    for (Player& other : game.getPlayers()) {
-        if (&other == &attacker) continue;
-    }
-    return targets;
 }
