@@ -100,6 +100,9 @@ void Player::executeTurn(Game& game){
         draw(5);
     }
     */
+
+    // ---- Ajustment Phase
+    cleanUp();
 }
 
 void Player::playActionCard(int cardIndex, Game& game) {
