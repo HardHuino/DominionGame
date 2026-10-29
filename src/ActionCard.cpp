@@ -63,17 +63,6 @@ std::vector<Player*> ActionCard::getAttackTargets(Player& attacker, Game& game) 
     std::vector<Player*> targets;
     for (Player& other : game.getPlayers()) {
         if (&other == &attacker) continue;
-
-        // Does the opponent hold a Reaction card (Moat) ?
-        bool canBlock = false;
-        for (const std::unique_ptr<Card>& c : other.getHand())
-            if (c->isAction() && static_cast<const ActionCard*>(c.get())->blocksAttack()) canBlock = true;
-
-        if (canBlock && Display::askChoice(other.getName() + " : devoiler une carte Reaction pour parer l'attaque ? (1 = oui, 0 = non) : ", 0, 1) == 1) {
-            Display::showMessage(other.getName() + " pare l'attaque !");
-            continue;
-        }
-        targets.push_back(&other);
     }
     return targets;
 }
