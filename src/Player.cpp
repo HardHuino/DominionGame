@@ -20,7 +20,7 @@ Player::Player(const std::string& name, Supply& supply) : name(name), actions(1)
     deck.push_back(std::move(card));
     }
     for (int i = 0; i < 3; ++i) // Estate are NOT taken from the Supply, so we can create them directly
-        deck.push_back(std::unique_ptr<Card>(new VictoryCard("Estate", 2, 1)));
+        deck.push_back(std::unique_ptr<Card>(new VictoryCard("Estate", 2, 1, false)));
     std::shuffle(deck.begin(), deck.end(), rng());
 
     // Draw the initial hand of 5 cards
@@ -74,6 +74,10 @@ void Player::executeTurn(Game& game){
         playActionCard(choice - 1, game);
         Display::showHand(*this); // the hand changed
     }
+
+    // ---- Ajustment Phase (end of turn)
+
+    cleanUp();
 
     // ---- Purchase Phase
     // for(auto card : hand){ //Money calculation
@@ -151,7 +155,7 @@ void Player::gain(std::unique_ptr<Card> card) { // useful for later with special
 
 int Player::countVictoryPoints() const {
     int totalVP = 0;
-
+    /*
     for (const auto& card : hand) {
         if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
     }
@@ -161,12 +165,8 @@ int Player::countVictoryPoints() const {
     for (const auto& card : discard) {
         if (card->isVictory()) totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
     }
-    
-    /* 1st attempt at garden
-    for (std::unique_ptr<Card>& c : hand) deck.push_back(std::move(c));
-    for (std::unique_ptr<Card>& c : discard) deck.push_back(std::move(c));
-    hand.clear();
-    discard.clear();
+    */
+    // 1st attempt at garden
     int nbGardens = 0; //For scoring with gardens
     for (const auto& card : deck) {
         if (card->isVictory()){
@@ -174,8 +174,15 @@ int Player::countVictoryPoints() const {
             else totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
         }
     }
-    totalVP += floor(nbGardens*0.1*deck.size());*/
+    totalVP += floor(nbGardens*0.1*deck.size());
     return totalVP; // TODO : add support for special cards that give victory points based on other conditions (e.g., Gardens, Duke, etc.)
+}
+
+void Player::resetDeck(){
+    for (std::unique_ptr<Card>& c : hand) deck.push_back(std::move(c));
+    for (std::unique_ptr<Card>& c : discard) deck.push_back(std::move(c));
+    hand.clear();
+    discard.clear();
 }
 
 std::unique_ptr<Card> Player::drawCard() { // needed to be separated from draw function because some card need to be seen before going anywhere

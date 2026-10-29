@@ -36,10 +36,10 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
     addPile<TreasureCard>(30, std::string("Gold"),   6, 3);
 
     // Victory cards
-    addPile<VictoryCard>(victory, std::string("Estate"),   2,  1);
-    addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3);
-    addPile<VictoryCard>(victory, std::string("Province"), 8,  6);
-    addPile<VictoryCard>(30, std::string("Curse"),    0, -1);
+    addPile<VictoryCard>(victory, std::string("Estate"),   2,  1, false);
+    addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3, false);
+    addPile<VictoryCard>(victory, std::string("Province"), 8,  6, false);
+    addPile<VictoryCard>(30, std::string("Curse"),    0, -1, false);
 }
 
 void Supply::makeFastMode(bool fastMode){ //Makes the game much faster (no matter which group of cards are in play)

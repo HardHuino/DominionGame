@@ -43,6 +43,9 @@ void Game::startGame(){
         if (supply.checkGameEnd()) break;
         activePlayerIndex = (activePlayerIndex + 1) % static_cast<int>(players.size());
     }
+    for(auto& p : players){//Puts all the cards of each player in their deck to count points
+        p.resetDeck();
+    }
     Display::showWinner(players);
 }
 

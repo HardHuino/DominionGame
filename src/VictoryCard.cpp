@@ -11,6 +11,6 @@ int VictoryCard::getVictoryPoints() const {
     return victoryPoints;
 }
 
-bool VictoryCard::getIsGarden() const {
+bool VictoryCard::getIsGarden(){
     return isGarden;
 }

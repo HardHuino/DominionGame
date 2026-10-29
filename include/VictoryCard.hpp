@@ -10,7 +10,7 @@ private:
     int victoryPoints;
     bool isGarden;
 public:
-    VictoryCard(const std::string& name, int cost, int victoryPoints);
+    VictoryCard(const std::string& name, int cost, int victoryPoints, bool isGarden);
 
     bool isVictory() const override;
 

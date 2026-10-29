@@ -37,6 +37,7 @@ public:
     void addActions(int numActions);
     void addPurchases(int numPurchases);
     void addCoins(int numCoins);
+    void resetDeck();
 
     // Primitives function used by action cards
     std::unique_ptr<Card> drawCard();                       // deck -> caller (reshuffles the discard if needed), nullptr if no card left at all
