@@ -43,7 +43,7 @@ CardPile* ActionCard::chooseFromSupply(Game& game, const std::string& prompt, co
     std::vector<CardPile*> options;
     for (const auto& entry : supply.getPiles()) {
         CardPile* pile = supply.getPile(entry.first);
-        if (pile && !pile->isEmpty() && (!filter || filter(pile->getModel())))
+        if (pile && !pile->isEmpty() && (!filter || filter(pile->getModel()))) //Rajoute les piles qui existe, qui ne sont pas vide et qui soit il n'y a pas de filtre soit le filtre est accompli par le model de la pile
             options.push_back(pile);
     }
     if (options.empty()) {

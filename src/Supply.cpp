@@ -40,7 +40,7 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
     addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3, false);
     addPile<VictoryCard>(victory, std::string("Province"), 8,  6, false);
     addPile<VictoryCard>(30, std::string("Curse"),    0, -1, false);
-    addPile<VictoryCard>(10, std::string("Garden"),    0, 0, true);
+    addPile<VictoryCard>(12, std::string("Garden"),    0, 0, true);
 }
 
 void Supply::makeFastMode(bool fastMode){ //Makes the game much faster (no matter which group of cards are in play)
