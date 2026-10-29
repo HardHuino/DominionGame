@@ -75,10 +75,6 @@ void Player::executeTurn(Game& game){
         Display::showHand(*this); // the hand changed
     }
 
-    // ---- Ajustment Phase (end of turn)
-
-    cleanUp();
-
     // ---- Purchase Phase
     // for(auto card : hand){ //Money calculation
     //     if(card->isTreasure()){
