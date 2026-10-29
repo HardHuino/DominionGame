@@ -39,11 +39,18 @@ void Game::startGame(){
     //Main game loop
     activePlayerIndex = 0;
     while (true) {
-        players[activePlayerIndex].executeTurn(supply);
+        players[activePlayerIndex].executeTurn(*this);
         if (supply.checkGameEnd()) break;
         activePlayerIndex = (activePlayerIndex + 1) % static_cast<int>(players.size());
     }
     Display::showWinner(players);
 }
 
+void Game::trashCard(std::unique_ptr<Card> card) {
+    if (card) trash.push_back(std::move(card)); // the trash keeps the card alive (a played Throne Room may still point to it)
+}
+
 const Supply& Game::getSupply() const{  return supply;  } //Returns the supply of the game
+Supply& Game::getSupply() { return supply; }
+std::vector<Player>& Game::getPlayers(){  return players;  }
+const std::vector<std::unique_ptr<Card> >& Game::getTrash() const{  return trash;  }

@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include "ActionCard.hpp"
+#include "Game.hpp"
 #include "TreasureCard.hpp"
 #include "VictoryCard.hpp"
 #include "Display.hpp" 
@@ -54,12 +56,24 @@ void Player::cleanUp() {
     draw(5);
 }
 
-void Player::executeTurn(Supply& supply){
+void Player::executeTurn(Game& game){
+    Supply& supply = game.getSupply();
     actions = 1; purchases = 1; coins = 0;
     Display::showTurnHeader(*this);
     Display::showHand(*this);
 
     // ---- Action Phase : TODO (jouer une carte Action tant que actions > 0)
+    while (actions > 0 && hasActionInHand()) {
+        Display::showStatus(*this);
+        int choice = Display::askChoice("Carte Action a jouer (0 pour passer) : ", 0, static_cast<int>(hand.size()));
+        if (choice == 0) break;
+        if (!hand[choice - 1]->isAction()) {
+            Display::showMessage("Ce n'est pas une carte Action.");
+            continue;
+        }
+        playActionCard(choice - 1, game);
+        Display::showHand(*this); // the hand changed
+    }
 
     // ---- Purchase Phase
     // for(auto card : hand){ //Money calculation
@@ -67,20 +81,18 @@ void Player::executeTurn(Supply& supply){
     //         coins+=static_cast<TreasureCard*>(card)->getValue(); //workaround to get value of a TreasureCard, since hand is a vector of Card* and not TreasureCard* NEED TO BE FIXED
     //     }
     // } // FIXED : using playTreasures() function instead of the above code to calculate coins
-    playTreasures();
+    playTreasures(); // all the treasures of the hand are played automatically
 
     while(purchases>0){ //Allows player to purchase cards
         Display::showStatus(*this);
         Display::showSupply(supply, coins); //Shows the Supply of cards
-        std::cout<<"You have "<<purchases<<" purchases left. What do you want to buy? (Type in the name)"<<endl<<"-->";
+        std::cout<<"You have "<<purchases<<" purchases left. What do you want to buy? (Type in the name, or press Enter to end your turn)"<<endl<<"-->";
         string name;
         name = Display::askLine(""); //Asks the user which card they want to buy.
+        if (name.empty()) break; // the player stops buying
         if(!buyCard(supply, name)) { //Attempts to buy the card
             std::cout<<"Failed to buy the card."<<endl; //Otherwise
         }
-    
-        // ---- Ajustment Phase (end of turn)
-        cleanUp();
     }
     //Draws a new hand
     /*
@@ -89,6 +101,21 @@ void Player::executeTurn(Supply& supply){
     }
     */
 }
+
+void Player::playActionCard(int cardIndex, Game& game) {
+    if (actions <= 0) return;
+    if (cardIndex < 0 || cardIndex >= static_cast<int>(hand.size())) return;
+    if (!hand[cardIndex]->isAction()) return;
+
+    std::unique_ptr<Card> card = removeFromHand(cardIndex);
+    ActionCard* action = static_cast<ActionCard*>(card.get()); // safe : isAction() was checked
+    playedCards.push_back(std::move(card)); // the card is in play BEFORE its effect (e.g. Feast trashes itself from there)
+    --actions;
+
+    Display::showMessage(name + " joue " + Display::cardLabel(*action));
+    action->effect(*this, game);
+}
+
 
 bool Player::buyCard(Supply& supply, const std::string& cardName) {
     CardPile* pile = supply.getPile(cardName);
@@ -189,6 +216,7 @@ std::unique_ptr<Card> Player::removeFromPlayed(const Card* card) {
     return nullptr;
 }
 
+// May or may not be used
 void Player::addToHand(std::unique_ptr<Card> card)   { if (card) hand.push_back(std::move(card)); }
 void Player::addToPlayed(std::unique_ptr<Card> card) { if (card) playedCards.push_back(std::move(card)); }
 void Player::putOnDeck(std::unique_ptr<Card> card)   { if (card) deck.push_back(std::move(card)); }

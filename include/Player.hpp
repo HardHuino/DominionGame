@@ -9,6 +9,7 @@
 typedef std::vector<std::unique_ptr<Card> > CardList; // Type alias for a vector of unique pointers to Card objects
 
 class Card;
+class Game;
 
 class Player {
 private:
@@ -26,8 +27,8 @@ public:
     // // Destructeur
     // virtual ~Player();
 
-    void executeTurn(Supply& supply);
-    void playActionCard(int cardIndex);
+    void executeTurn(Game& game);
+    void playActionCard(int cardIndex, Game& game); // hand -> played cards, costs 1 action, then resolves the card
     bool buyCard(Supply& supply, const std::string& cardName); // supply -> discard, returns true if the purchase was successful, false otherwise
     void gain(std::unique_ptr<Card> card); // any sources -> discard, adds a card to the player's discard pile
     int countVictoryPoints() const;
