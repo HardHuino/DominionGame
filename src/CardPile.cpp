@@ -21,6 +21,6 @@ int CardPile::getQuantity() const { return static_cast<int>(cards.size()); }
 bool CardPile::isEmpty() const { return cards.empty(); }
 
 // Setters
-void CardPile::setQuantity(int quantity) {
+void CardPile::reduceQuantity(int quantity) {
     cards.resize(quantity);
 }

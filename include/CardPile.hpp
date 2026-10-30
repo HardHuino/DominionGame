@@ -27,7 +27,7 @@ class CardPile{
     bool isEmpty() const;
 
     // Setters
-    void setQuantity(int quantity);
+    void reduceQuantity(int quantity);
 };
 
 #endif

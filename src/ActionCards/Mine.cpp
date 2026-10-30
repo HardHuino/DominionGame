@@ -9,7 +9,7 @@ Mine::Mine() : ActionCard("Mine", 5) {}
 
 // You may trash a Treasure from your hand. Gain a Treasure to your hand costing up to 3 Coins more than it.
 void Mine::effect(Player& player, Game& game) {
-    int index = chooseFromHand(player, "Carte Tresor a ecarter", Choice::Must,
+    int index = chooseFromHand(player, "Carte Tresor a ecarter", Choice::May,
                                [](const Card& c) { return c.isTreasure(); });
     if (index < 0) return; // no Treasure in hand : nothing happens
 

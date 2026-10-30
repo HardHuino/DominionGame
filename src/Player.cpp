@@ -243,10 +243,9 @@ bool Player::hasActionInHand() const {
     return false;
 }
 
-int Player::indexCardInHand(std::unique_ptr<Card> card) const{
-    for (std::size_t i=0; i<hand.size(); i++){
-        if (hand.at(i)->getName()==card->getName()){return i;}
-    }
+int Player::indexCardInHand(const std::string& name) const{
+    for (std::size_t i = 0; i < hand.size(); i++)
+        if (hand[i]->getName() == name) return static_cast<int>(i);
     return -1;
 }
 

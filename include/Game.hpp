@@ -16,6 +16,9 @@ private:
     Supply supply;
     std::vector<std::unique_ptr<Card> > trash; // cards removed from the game ("Rebut")
     int activePlayerIndex;
+
+    // Asks the players which 10 kingdom cards are in the game (preset, random or one by one)
+    std::vector<std::string> chooseKingdom() const;
 public:
     // Constructeur
     Game();
@@ -24,7 +27,6 @@ public:
     virtual ~Game() = default;
 
     void startGame();
-    void playTurn();
 
     void trashCard(std::unique_ptr<Card> card);
 

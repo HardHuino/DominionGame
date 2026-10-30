@@ -1,27 +1,101 @@
 #include "Supply.hpp"
 #include "TreasureCard.hpp"
 #include "VictoryCard.hpp"
-#include "ActionCards/Chapel.hpp"
-#include "ActionCards/Feast.hpp"
-#include "ActionCards/Laboratory.hpp"
-#include "ActionCards/Moat.hpp"
-#include "ActionCards/Thief.hpp"
-#include "ActionCards/Village.hpp"
-#include "ActionCards/Witch.hpp"
-#include "Workshop.hpp"
-#include "Woodcutter.hpp"
-#include "Smithy.hpp"
-#include "Mine.hpp"
+#include "Adventurer.hpp"
+#include "Bureaucrat.hpp"
+#include "Cellar.hpp"
+#include "Chancellor.hpp"
+#include "Chapel.hpp"
+#include "CouncilRoom.hpp"
+#include "Feast.hpp"
+#include "Festival.hpp"
+#include "Laboratory.hpp"
+#include "Library.hpp"
 #include "Market.hpp"
 #include "Militia.hpp"
+#include "Mine.hpp"
+#include "Moat.hpp"
+#include "MoneyLender.hpp"
 #include "Remodel.hpp"
+#include "Smithy.hpp"
+#include "Spy.hpp"
+#include "Thief.hpp"
+#include "ThroneRoom.hpp"
 #include "Village.hpp"
-#include "Cellar.hpp"
+#include "Witch.hpp"
+#include "Woodcutter.hpp"
+#include "Workshop.hpp"
 
 #include <cctype>
 #include <stdexcept>
 #include <utility>
 
+static std::string toLower(std::string s) { // Converts a string to lowercase
+    for (std::size_t i = 0; i < s.size(); ++i)
+        s[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(s[i])));
+    return s;
+}
+
+// One entry of the kingdom catalog : how to build the cards of the pile + what the card does (for the selection menu)
+struct KingdomEntry {
+    std::string description;
+    int quantity;
+    std::function<std::unique_ptr<Card>()> create;
+};
+
+template <class T> // for the vector of kingdomEntries
+std::unique_ptr<Card> makeCard() {
+    return std::unique_ptr<Card>(new T());
+}
+
+std::unique_ptr<Card> makeGarden() { // special victory card
+    return std::unique_ptr<Card>(new VictoryCard("Garden", 4, 0, true));
+}
+
+// The 25 kingdom cards of the first edition (alphabetical order). Garden is a Victory card but is a kingdom card too.
+const std::vector<KingdomEntry>& kingdomEntries() {
+    static const std::vector<KingdomEntry> entries = {
+        { "Devoilez des cartes jusqu'a 2 Tresors : prenez-les en main, defaussez le reste.", 10, &makeCard<Adventurer> },
+        { "Recevez un Silver sur votre pioche. Les adversaires remettent une carte Victoire sur leur pioche. (Attaque)", 10, &makeCard<Bureaucrat> },
+        { "+1 Action. Defaussez N cartes, piochez N cartes.", 10, &makeCard<Cellar> },
+        { "+2 Pieces. Vous pouvez mettre votre pioche dans la defausse.", 10, &makeCard<Chancellor> },
+        { "Ecartez jusqu'a 4 cartes de votre main.", 10, &makeCard<Chapel> },
+        { "+4 Cartes, +1 Achat. Chaque adversaire pioche 1 carte.", 10, &makeCard<CouncilRoom> },
+        { "Ecartez cette carte. Recevez une carte coutant jusqu'a 5.", 10, &makeCard<Feast> },
+        { "+2 Actions, +1 Achat, +2 Pieces.", 10, &makeCard<Festival> },
+        { "1 point de victoire par groupe de 10 cartes dans votre deck.", 12, &makeGarden },
+        { "+2 Cartes, +1 Action.", 10, &makeCard<Laboratory> },
+        { "Piochez jusqu'a avoir 7 cartes en main (vous pouvez mettre de cote les Actions piochees).", 10, &makeCard<Library> },
+        { "+1 Carte, +1 Action, +1 Achat, +1 Piece.", 10, &makeCard<Market> },
+        { "+2 Pieces. Les adversaires se defaussent jusqu'a 3 cartes en main. (Attaque)", 10, &makeCard<Militia> },
+        { "Ecartez un Tresor de votre main : recevez en main un Tresor coutant jusqu'a 3 de plus.", 10, &makeCard<Mine> },
+        { "+2 Cartes. Vous protege des attaques (reaction).", 10, &makeCard<Moat> },
+        { "Ecartez un Copper de votre main : +3 Pieces.", 10, &makeCard<MoneyLender> },
+        { "Ecartez une carte de votre main : recevez une carte coutant jusqu'a 2 de plus.", 10, &makeCard<Remodel> },
+        { "+3 Cartes.", 10, &makeCard<Smithy> },
+        { "+1 Carte, +1 Action. Chaque joueur devoile sa premiere carte, vous decidez de la defausser ou non. (Attaque)", 10, &makeCard<Spy> },
+        { "Les adversaires devoilent 2 cartes et ecartent un Tresor de votre choix, que vous pouvez recuperer. (Attaque)", 10, &makeCard<Thief> },
+        { "Jouez une carte Action de votre main deux fois.", 10, &makeCard<ThroneRoom> },
+        { "+1 Carte, +2 Actions.", 10, &makeCard<Village> },
+        { "+2 Cartes. Chaque adversaire recoit une Curse. (Attaque)", 10, &makeCard<Witch> },
+        { "+1 Achat, +2 Pieces.", 10, &makeCard<Woodcutter> },
+        { "Recevez une carte coutant jusqu'a 4.", 10, &makeCard<Workshop> }
+    };
+    return entries;
+}
+
+// Trouve l'entrée dont la carte s'appelle `name` (insensible à la casse), sinon nullptr
+const KingdomEntry* findEntry(const std::string& name) {
+    const std::string wanted = toLower(name);
+    for (const KingdomEntry& e : kingdomEntries())
+        if (toLower(e.create()->getName()) == wanted) return &e;
+    return nullptr;
+}
+
+std::unique_ptr<Card> Supply::makeKingdomCard(const std::string& name) {
+    const KingdomEntry* e = findEntry(name);
+    return e ? e->create() : nullptr;
+}
 
 using namespace std;
 
@@ -34,10 +108,36 @@ void Supply::addPile(int quantity, Args... args) {
     piles.emplace(name, std::move(pile));
 }
 
-static std::string toLower(std::string s) { // Converts a string to lowercase
-    for (std::size_t i = 0; i < s.size(); ++i)
-        s[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(s[i])));
-    return s;
+std::vector<Supply::KingdomCardInfo> Supply::getKingdomCatalog() {
+    std::vector<KingdomCardInfo> catalog;
+    const std::vector<KingdomEntry>& entries = kingdomEntries();
+    for (std::size_t i = 0; i < entries.size(); ++i) {
+        std::unique_ptr<Card> model = entries[i].create();
+        KingdomCardInfo info;
+        info.name = model->getName();
+        info.cost = model->getCost();
+        info.description = entries[i].description;
+        catalog.push_back(info);
+    }
+    return catalog;
+}
+
+
+void Supply::addKingdomPile(const std::string& name) {
+    const std::vector<KingdomEntry>& entries = kingdomEntries();
+    for (std::size_t i = 0; i < entries.size(); ++i) {
+        std::unique_ptr<Card> model = entries[i].create();
+        if (toLower(model->getName()) != toLower(name)) continue;
+
+        const std::string pileName = model->getName();
+        if (piles.count(pileName)) return; // already in the game (duplicate in the list)
+        CardPile pile(std::move(model));
+        for (int n = 0; n < entries[i].quantity; ++n)
+            pile.addCard(entries[i].create());
+        piles.emplace(pileName, std::move(pile));
+        return;
+    }
+    throw std::invalid_argument("Carte royaume inconnue : " + name);
 }
 
 std::unique_ptr<Card> Supply::takeCard(const std::string& name) {
@@ -45,7 +145,7 @@ std::unique_ptr<Card> Supply::takeCard(const std::string& name) {
     return pile ? pile->takeCard() : nullptr;
 }
 
-void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on the number of players
+void Supply::initializeSupply(int numPlayers, const std::vector<std::string>& kingdomNames){ //Setsup the Game depending on the number of players
     const int victory = (numPlayers == 2) ? 8 : 12;
     // Treasure cards
     addPile<TreasureCard>(60, std::string("Copper"), 0, 1);
@@ -57,25 +157,16 @@ void Supply::initializeSupply(int numPlayers){ //Setsup the Game depending on th
     addPile<VictoryCard>(victory, std::string("Duchy"),    5,  3, false);
     addPile<VictoryCard>(victory, std::string("Province"), 8,  6, false);
     addPile<VictoryCard>(30, std::string("Curse"),    0, -1, false);
-    addPile<VictoryCard>(12, std::string("Garden"),    0, 0, true); //Gardens
 
-    //Action Cards (for beginer game)
-    addPile<Workshop>(10);
-    addPile<Woodcutter>(10);
-    addPile<Mine>(10);
-    addPile<Moat>(10);
-    addPile<Market>(10);
-    addPile<Militia>(10);
-    addPile<Smithy>(10);
-    addPile<Remodel>(10);
-    addPile<Village>(10);
-    addPile<Cellar>(10);
+    // Kingdom cards (chosen at the beginning of the game)
+    for (std::size_t i = 0; i < kingdomNames.size(); ++i)
+        addKingdomPile(kingdomNames[i]);
 }
 
 void Supply::makeFastMode(bool fastMode){ //Makes the game much faster (no matter which group of cards are in play)
     if(fastMode){ 
         for (auto& i : piles){ //Runs through all the piles
-            i.second.setQuantity(1); //Sets the quantity of cards in every pile to 1
+            i.second.reduceQuantity(1); //Sets the quantity of cards in every pile to 1
         }
     }
 };

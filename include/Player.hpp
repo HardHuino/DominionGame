@@ -59,7 +59,7 @@ public:
     int getDeckSize() const;
     int getDiscardSize() const;
     bool hasActionInHand() const;
-    int indexCardInHand(std::unique_ptr<Card> card) const;
+    int indexCardInHand(const std::string& name) const;
 };
 
 #endif // PLAYER_HPP
