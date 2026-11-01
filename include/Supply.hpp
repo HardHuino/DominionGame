@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 #include "CardPile.hpp"
-using namespace std;
+
 class Supply{
 private:
-    map<string, CardPile> piles;
+    std::map<std::string, CardPile> piles;
 
     template <class T, class... Args>
     void addPile(int quantity, Args... args); // Helper function to add a pile of cards to the supply
@@ -37,8 +37,8 @@ public:
     static std::unique_ptr<Card> makeKingdomCard(const std::string& name); // nullptr si inconnue
 
     // Getters
-    CardPile* getPile(const string& name); // nullptr if not found
-    const map<string, CardPile>& getPiles() const;
+    CardPile* getPile(const std::string& name); // nullptr if not found
+    const std::map<std::string, CardPile>& getPiles() const;
 
 };
 #endif

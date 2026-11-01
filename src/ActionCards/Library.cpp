@@ -11,6 +11,7 @@ Library::Library() : ActionCard("Library", 5) {}
 void Library::effect(Player& player, Game&) {
     while(player.getHand().size()<7){
         std::unique_ptr<Card> drawnCard = player.drawCard();
+        if (!drawnCard) break;
         if(drawnCard->isAction()){
             int discardCard = Display::askChoice("You have drawn an action card, do you want to keep it or discard it? (keep: 0, discard: 1) : ", 0, 1);
             if(discardCard == 1){//Trashes drawn card

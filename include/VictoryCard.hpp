@@ -16,7 +16,7 @@ public:
 
     int getVictoryPoints() const;
 
-    bool getIsGarden();
+    bool getIsGarden() const;
 };
 
 #endif // VICTORY_CARD_HPP

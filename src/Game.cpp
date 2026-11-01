@@ -87,7 +87,7 @@ std::vector<std::string> Game::chooseKingdom() const {
 
     const std::vector<Supply::KingdomCardInfo> catalog = Supply::getKingdomCatalog();
 
-    if (mode == 3) { // Random mode
+    if (mode == 4) { // Random mode
         std::vector<std::string> names;
         for (const Supply::KingdomCardInfo& info : catalog) names.push_back(info.name);
         std::shuffle(names.begin(), names.end(), rng());

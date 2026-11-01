@@ -86,12 +86,12 @@ void Player::executeTurn(Game& game){
     while(purchases>0){ //Allows player to purchase cards
         Display::showStatus(*this);
         Display::showSupply(supply, coins); //Shows the Supply of cards
-        std::cout<<"You have "<<purchases<<" purchases left. What do you want to buy? (Type in the name, or press Enter to end your turn)"<<endl<<"-->";
-        string name;
+        Display::showMessage("You have "+std::to_string(purchases)+" purchases left and "+std::to_string(coins)+" coins. What do you want to buy? (Type in the name, or press Enter to end your turn)");
+        std::string name;
         name = Display::askLine(""); //Asks the user which card they want to buy.
         if (name.empty()) break; // the player stops buying
         if(!buyCard(supply, name)) { //Attempts to buy the card
-            std::cout<<"Failed to buy the card."<<endl; //Otherwise
+            Display::showMessage("Failed to buy the card.");
         }
     }
     //Draws a new hand

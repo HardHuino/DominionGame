@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class CardPile{
     private:
     std::unique_ptr<Card> model; // model=type of card in the pile

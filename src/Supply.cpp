@@ -30,10 +30,10 @@
 #include <stdexcept>
 #include <utility>
 
-static std::string toLower(std::string s) { // Converts a string to lowercase
-    for (std::size_t i = 0; i < s.size(); ++i)
-        s[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(s[i])));
-    return s;
+static std::string toLower(std::string s) { // Converts a string to lowercase (and remove spaces)
+    std::string r;
+    for (char c : s) if (c != ' ') r += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    return r;
 }
 
 // One entry of the kingdom catalog : how to build the cards of the pile + what the card does (for the selection menu)
@@ -84,7 +84,7 @@ const std::vector<KingdomEntry>& kingdomEntries() {
     return entries;
 }
 
-// Trouve l'entrée dont la carte s'appelle `name` (insensible à la casse), sinon nullptr
+// Trouve l'entrée dont la carte s'appelle 'name' (insensible à la casse), sinon nullptr
 const KingdomEntry* findEntry(const std::string& name) {
     const std::string wanted = toLower(name);
     for (const KingdomEntry& e : kingdomEntries())
@@ -183,7 +183,7 @@ bool Supply::checkGameEnd() const{ //Counts number of empty piles to check if ga
 
 // Getters
 
-CardPile* Supply::getPile(const string& name){
+CardPile* Supply::getPile(const std::string& name){
     const std::string wanted = toLower(name);
     for (auto& p : piles) { //Searches through all of the pile (the map containing names and their associated CardPile)
         if (toLower(p.first) == wanted){ //If name matches

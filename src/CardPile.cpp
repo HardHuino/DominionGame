@@ -22,5 +22,7 @@ bool CardPile::isEmpty() const { return cards.empty(); }
 
 // Setters
 void CardPile::reduceQuantity(int quantity) {
-    cards.resize(quantity);
+    if (quantity < 0) quantity = 0;
+    if (static_cast<std::size_t>(quantity) >= cards.size()) return; // nothing to remove
+    cards.erase(cards.begin() + quantity, cards.end());              // remove card that are above limit
 }
