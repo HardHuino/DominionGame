@@ -30,11 +30,11 @@ int ActionCard::chooseFromHand(Player& player, const std::string& prompt, Choice
     while (true) {
         Display::showHand(player);
         const bool may = (choice == Choice::May);
-        int answer = Display::askChoice(prompt + (may ? " (0 pour passer) : " : " : "),
+        int answer = Display::askChoice(prompt + (may ? " (0 to pass) : " : " : "),
                                         may ? 0 : 1, static_cast<int>(hand.size()));
         if (answer == 0) return -1;
         if (!filter || filter(*hand[answer - 1])) return answer - 1;
-        Display::showMessage("Cette carte ne convient pas pour cet effet.");
+        Display::showMessage("This card is not suitable for this effect.");
     }
 }
 
@@ -48,7 +48,7 @@ CardPile* ActionCard::chooseFromSupply(Game& game, const std::string& prompt, co
             options.push_back(pile);
     }
     if (options.empty()) {
-        Display::showMessage("Aucune carte de la reserve ne convient.");
+        Display::showMessage("No card from the supply is suitable.");
         return nullptr;
     }
 
@@ -56,6 +56,6 @@ CardPile* ActionCard::chooseFromSupply(Game& game, const std::string& prompt, co
     for (std::size_t i = 0; i < options.size(); ++i)
         Display::showMessage("  [" + std::to_string(i + 1) + "] " + Display::cardLabel(options[i]->getModel())
                              + " x" + std::to_string(options[i]->getQuantity()));
-    int choice = Display::askChoice("Votre choix : ", 1, static_cast<int>(options.size()));
+    int choice = Display::askChoice("Your choice : ", 1, static_cast<int>(options.size()));
     return options[choice - 1];
 }

@@ -37,7 +37,7 @@ void Game::startGame(){
     //     cin>>nbPlayers;
     // } // remplaced by the Display::askChoice function to avoid code duplication and to have a more user-friendly input handling
 
-    nbPlayers = Display::askChoice("Nombre de joueurs (2-4) : ", 2, 4);
+    nbPlayers = Display::askChoice("Number of players (2-4) : ", 2, 4);
     fastMode = Display::askChoice("Do you want to play in FastMode? (0 for no, 1 for yes) : ", 0, 1); //Using the askChoice since already coded
 
     // 1. Initializes the supply of cards (i.e. piles of cards in the middle of the board)
@@ -50,7 +50,7 @@ void Game::startGame(){
         // std::cin>>playerName;
         
         std::string name = "Joueur " + std::to_string(i + 1); // default name
-        std::string typed = Display::askLine("Nom du joueur " + std::to_string(i + 1) + " : ");
+        std::string typed = Display::askLine("Name of player " + std::to_string(i + 1) + " : ");
         if (!typed.empty()) name = typed;
 
         //creates the player instance and adds it to the vector
@@ -73,13 +73,13 @@ void Game::startGame(){
 }
 
 std::vector<std::string> Game::chooseKingdom() const {
-    Display::showMessage("\nChoix des 10 cartes Royaume :");
-    Display::showMessage("  [1] Set du sujet (Workshop, Woodcutter, Chapel, Moat, Feast, Garden, Laboratory, Witch, Village, Thief)");
-    Display::showMessage("  [2] 'Les premières parties' (Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)");
-    Display::showMessage("  [3] 'Richesses et trésors' (Adventurer, Bureaucrat, Chancellor, Chapel, Feast, Laboratory, Market, Mine, MoneyLender, ThroneRoom)");
-    Display::showMessage("  [4] Aleatoire");
-    Display::showMessage("  [5] Choix manuel (carte par carte)");
-    const int mode = Display::askChoice("Votre choix (entrez l'INDEX entre crochets) : ", 1, 5);
+    Display::showMessage("\nChoice of the 10 Kingdom cards :");
+    Display::showMessage("  [1] Project Set (Workshop, Woodcutter, Chapel, Moat, Feast, Garden, Laboratory, Witch, Village, Thief)");
+    Display::showMessage("  [2] 'First Games' (Cellar, Market, Militia, Mine, Moat, Remodel, Smithy, Village, Woodcutter, Workshop)");
+    Display::showMessage("  [3] 'Riches and Treasures' (Adventurer, Bureaucrat, Chancellor, Chapel, Feast, Laboratory, Market, Mine, MoneyLender, ThroneRoom)");
+    Display::showMessage("  [4] Random");
+    Display::showMessage("  [5] Manual Choice (card by card)");
+    const int mode = Display::askChoice("Your choice (enter the INDEX between brackets) : ", 1, 5);
 
     if (mode == 1) return projectKingdom();
     if (mode == 2) return firstGameKingdom();
@@ -95,12 +95,12 @@ std::vector<std::string> Game::chooseKingdom() const {
         std::sort(names.begin(), names.end());
         std::string list;
         for (const std::string& n : names) list += (list.empty() ? "" : ", ") + n;
-        Display::showMessage("Cartes tirees au sort : " + list);
+        Display::showMessage("Cards drawn at random : " + list);
         return names;
     }
 
     // Manual choice : the player types the INDEX of each card
-    Display::showMessage("\nCartes Royaume disponibles :");
+    Display::showMessage("\nAvailable Kingdom Cards :");
     for (std::size_t i = 0; i < catalog.size(); ++i) {
         std::unique_ptr<Card> card = Supply::makeKingdomCard(catalog[i].name);
         Display::showMessage("  [" + std::to_string(i + 1) + "] " + Display::cardLabel(*card)
@@ -110,15 +110,15 @@ std::vector<std::string> Game::chooseKingdom() const {
     std::vector<std::string> chosen;
     std::vector<bool> taken(catalog.size(), false);
     while (static_cast<int>(chosen.size()) < KINGDOM_SIZE) {
-        int index = Display::askChoice("Carte Royaume " + std::to_string(chosen.size() + 1) + "/" + std::to_string(KINGDOM_SIZE)
-                                       + " (entrez l'INDEX entre crochets) : ", 1, static_cast<int>(catalog.size()));
+        int index = Display::askChoice("Kingdom Card " + std::to_string(chosen.size() + 1) + "/" + std::to_string(KINGDOM_SIZE)
+                                       + " (enter the INDEX between brackets) : ", 1, static_cast<int>(catalog.size()));
         if (taken[index - 1]) {
-            Display::showMessage(catalog[index - 1].name + " est deja choisie.");
+            Display::showMessage(catalog[index - 1].name + " is already chosen.");
             continue;
         }
         taken[index - 1] = true;
         chosen.push_back(catalog[index - 1].name);
-        Display::showMessage("  -> " + catalog[index - 1].name + " ajoutee.");
+        Display::showMessage("  -> " + catalog[index - 1].name + " added.");
     }
     return chosen;
 }

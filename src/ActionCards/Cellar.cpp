@@ -9,7 +9,7 @@ void Cellar::effect(Player& player, Game&) {
 
     int discarded = 0;
     while (true) {
-        int index = chooseFromHand(player, "Carte a defausser", Choice::May);
+        int index = chooseFromHand(player, "Card to discard", Choice::May);
         if (index < 0) break; // the player is done (or the hand is empty)
         player.discardFromHand(index);
         ++discarded;

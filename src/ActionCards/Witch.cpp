@@ -13,10 +13,10 @@ void Witch::effect(Player& player, Game& game) {
     for (Player* target : game.getAttackTargets(player)) {
         std::unique_ptr<Card> curse = game.getSupply().takeCard("Curse");
         if (!curse) {
-            Display::showMessage("La pile Curse est vide.");
+            Display::showMessage("The Curse pile is empty.");
             break;
         }
-        Display::showMessage(target->getName() + " recoit " + Display::cardLabel(*curse));
+        Display::showMessage(target->getName() + " receives " + Display::cardLabel(*curse));
         target->gain(std::move(curse));
     }
 }

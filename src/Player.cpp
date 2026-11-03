@@ -65,10 +65,10 @@ void Player::executeTurn(Game& game){
     // ---- Action Phase : TODO (jouer une carte Action tant que actions > 0)
     while (actions > 0 && hasActionInHand()) {
         Display::showStatus(*this);
-        int choice = Display::askChoice("Carte Action a jouer (0 pour passer) : ", 0, static_cast<int>(hand.size()));
+        int choice = Display::askChoice("Action to play (0 to pass) : ", 0, static_cast<int>(hand.size()));
         if (choice == 0) break;
         if (!hand[choice - 1]->isAction()) {
-            Display::showMessage("Ce n'est pas une carte Action.");
+            Display::showMessage("This is not an action card.");
             continue;
         }
         playActionCard(choice - 1, game);
@@ -115,7 +115,7 @@ void Player::playActionCard(int cardIndex, Game& game) {
     playedCards.push_back(std::move(card)); // the card is in play BEFORE its effect (e.g. Feast trashes itself from there)
     --actions;
 
-    Display::showMessage(name + " joue " + Display::cardLabel(*action));
+    Display::showMessage("[Action] " + name + " plays " + Display::cardLabel(*action));
     action->effect(*this, game);
 }
 

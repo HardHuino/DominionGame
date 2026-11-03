@@ -55,31 +55,31 @@ std::unique_ptr<Card> makeGarden() { // special victory card
 // The 25 kingdom cards of the first edition (alphabetical order). Garden is a Victory card but is a kingdom card too.
 const std::vector<KingdomEntry>& kingdomEntries() {
     static const std::vector<KingdomEntry> entries = {
-        { "Devoilez des cartes jusqu'a 2 Tresors : prenez-les en main, defaussez le reste.", 10, &makeCard<Adventurer> },
-        { "Recevez un Silver sur votre pioche. Les adversaires remettent une carte Victoire sur leur pioche. (Attaque)", 10, &makeCard<Bureaucrat> },
-        { "+1 Action. Defaussez N cartes, piochez N cartes.", 10, &makeCard<Cellar> },
-        { "+2 Pieces. Vous pouvez mettre votre pioche dans la defausse.", 10, &makeCard<Chancellor> },
-        { "Ecartez jusqu'a 4 cartes de votre main.", 10, &makeCard<Chapel> },
-        { "+4 Cartes, +1 Achat. Chaque adversaire pioche 1 carte.", 10, &makeCard<CouncilRoom> },
-        { "Ecartez cette carte. Recevez une carte coutant jusqu'a 5.", 10, &makeCard<Feast> },
-        { "+2 Actions, +1 Achat, +2 Pieces.", 10, &makeCard<Festival> },
-        { "1 point de victoire par groupe de 10 cartes dans votre deck.", 12, &makeGarden },
-        { "+2 Cartes, +1 Action.", 10, &makeCard<Laboratory> },
-        { "Piochez jusqu'a avoir 7 cartes en main (vous pouvez mettre de cote les Actions piochees).", 10, &makeCard<Library> },
-        { "+1 Carte, +1 Action, +1 Achat, +1 Piece.", 10, &makeCard<Market> },
-        { "+2 Pieces. Les adversaires se defaussent jusqu'a 3 cartes en main. (Attaque)", 10, &makeCard<Militia> },
-        { "Ecartez un Tresor de votre main : recevez en main un Tresor coutant jusqu'a 3 de plus.", 10, &makeCard<Mine> },
-        { "+2 Cartes. Vous protege des attaques (reaction).", 10, &makeCard<Moat> },
-        { "Ecartez un Copper de votre main : +3 Pieces.", 10, &makeCard<MoneyLender> },
-        { "Ecartez une carte de votre main : recevez une carte coutant jusqu'a 2 de plus.", 10, &makeCard<Remodel> },
-        { "+3 Cartes.", 10, &makeCard<Smithy> },
-        { "+1 Carte, +1 Action. Chaque joueur devoile sa premiere carte, vous decidez de la defausser ou non. (Attaque)", 10, &makeCard<Spy> },
-        { "Les adversaires devoilent 2 cartes et ecartent un Tresor de votre choix, que vous pouvez recuperer. (Attaque)", 10, &makeCard<Thief> },
-        { "Jouez une carte Action de votre main deux fois.", 10, &makeCard<ThroneRoom> },
-        { "+1 Carte, +2 Actions.", 10, &makeCard<Village> },
-        { "+2 Cartes. Chaque adversaire recoit une Curse. (Attaque)", 10, &makeCard<Witch> },
-        { "+1 Achat, +2 Pieces.", 10, &makeCard<Woodcutter> },
-        { "Recevez une carte coutant jusqu'a 4.", 10, &makeCard<Workshop> }
+        { "Reveal cards until 2 Treasures are revealed : take them into hand, discard the rest.", 10, &makeCard<Adventurer> },
+        { "Receive a Silver on your draw pile. Opponents put a Victory card on their draw pile. (Attack)", 10, &makeCard<Bureaucrat> },
+        { "+1 Action. Discard N cards, draw N cards.", 10, &makeCard<Cellar> },
+        { "+2 Coins. You may put your draw pile into the discard pile.", 10, &makeCard<Chancellor> },
+        { "Discard up to 4 cards from your hand.", 10, &makeCard<Chapel> },
+        { "+4 Cards, +1 Buy. Each opponent draws 1 card.", 10, &makeCard<CouncilRoom> },
+        { "Discard this card. Receive a card costing up to 5.", 10, &makeCard<Feast> },
+        { "+2 Actions, +1 Buy, +2 Coins.", 10, &makeCard<Festival> },
+        { "1 victory point per group of 10 cards in your deck.", 12, &makeGarden },
+        { "+2 Cards, +1 Action.", 10, &makeCard<Laboratory> },
+        { "Draw until you have 7 cards in hand (you may set aside the Actions drawn).", 10, &makeCard<Library> },
+        { "+1 Card, +1 Action, +1 Buy, +1 Coin.", 10, &makeCard<Market> },
+        { "+2 Coins. Opponents discard down to 3 cards in hand. (Attack)", 10, &makeCard<Militia> },
+        { "Discard a Treasure from your hand: gain a Treasure costing up to 3 more.", 10, &makeCard<Mine> },
+        { "+2 Cards. You are protected from attacks (reaction).", 10, &makeCard<Moat> },
+        { "Discard a Copper from your hand: +3 Coins.", 10, &makeCard<MoneyLender> },
+        { "Discard a card from your hand: gain a card costing up to 2 more.", 10, &makeCard<Remodel> },
+        { "+3 Cards.", 10, &makeCard<Smithy> },
+        { "+1 Card, +1 Action. Each player reveals their first card, you choose to discard it or not. (Attack)", 10, &makeCard<Spy> },
+        { "Opponents reveal 2 cards and discard a Treasure of your choice, which you may take. (Attack)", 10, &makeCard<Thief> },
+        { "Play an Action card from your hand twice.", 10, &makeCard<ThroneRoom> },
+        { "+1 Card, +2 Actions.", 10, &makeCard<Village> },
+        { "+2 Cards. Each opponent receives a Curse. (Attack)", 10, &makeCard<Witch> },
+        { "+1 Buy, +2 Coins.", 10, &makeCard<Woodcutter> },
+        { "Receive a card costing up to 4.", 10, &makeCard<Workshop> }
     };
     return entries;
 }
@@ -137,7 +137,7 @@ void Supply::addKingdomPile(const std::string& name) {
         piles.emplace(pileName, std::move(pile));
         return;
     }
-    throw std::invalid_argument("Carte royaume inconnue : " + name);
+    throw std::invalid_argument("Kingdom card unknown : " + name);
 }
 
 std::unique_ptr<Card> Supply::takeCard(const std::string& name) {

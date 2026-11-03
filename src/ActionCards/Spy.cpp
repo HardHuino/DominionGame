@@ -20,11 +20,11 @@ void Spy::effect(Player& player, Game& game) {
     for (Player* victim : concerned) {
         std::unique_ptr<Card> top = victim->drawCard();
         if (!top) {
-            Display::showMessage(victim->getName() + " n'a plus aucune carte a reveler.");
+            Display::showMessage(victim->getName() + " has no more cards to reveal.");
             continue;
         }
-        Display::showMessage(victim->getName() + " devoile " + Display::cardLabel(*top));
-        if (Display::askChoice(player.getName() + " : 1 = defausser cette carte, 0 = la remettre sur la pioche : ", 0, 1) == 1)
+        Display::showMessage(victim->getName() + " reveals " + Display::cardLabel(*top));
+        if (Display::askChoice(player.getName() + " : 1 = discard this card, 0 = put it back on the deck : ", 0, 1) == 1)
             victim->discardCard(std::move(top));
         else
             victim->putOnDeck(std::move(top));

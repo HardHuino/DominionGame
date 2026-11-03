@@ -12,7 +12,7 @@ void Militia::effect(Player& player, Game& game) {
 
     for (Player* target : game.getAttackTargets(player)) {
         while (target->getHand().size() > 3) {
-            int index = chooseFromHand(*target, target->getName() + " : defaussez une carte (3 cartes maximum en main)", Choice::Must);
+            int index = chooseFromHand(*target, target->getName() + " : discard a card (3 cards maximum in hand)", Choice::Must);
             if (index < 0) break;
             target->discardFromHand(index);
         }

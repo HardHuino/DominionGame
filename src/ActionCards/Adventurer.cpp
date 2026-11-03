@@ -13,7 +13,7 @@ void Adventurer::effect(Player& player, Game&) {
     while (treasuresFound<2) {
         std::unique_ptr<Card> card = player.drawCard();
         if (!card) break; // deck and discard empty : stop (shouldn't happen)
-        Display::showMessage(player.getName() + " devoile " + Display::cardLabel(*card));
+        Display::showMessage(player.getName() + " reveals " + Display::cardLabel(*card));
         if (card->isTreasure()) {
             player.addToHand(std::move(card));
             treasuresFound++;

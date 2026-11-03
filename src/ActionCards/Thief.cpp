@@ -16,7 +16,7 @@ void Thief::effect(Player& player, Game& game) {
         for (int i = 0; i < 2; ++i) {
             std::unique_ptr<Card> card = target->drawCard();
             if (!card) break;
-            Display::showMessage(target->getName() + " devoile " + Display::cardLabel(*card));
+            Display::showMessage(target->getName() + " reveals " + Display::cardLabel(*card));
             if (card->isTreasure()) treasures.push_back(std::move(card));
             else                    others.push_back(std::move(card));
         }
@@ -26,8 +26,8 @@ void Thief::effect(Player& player, Game& game) {
         if (treasures.size() == 1) {
             stolen = std::move(treasures[0]);
         } else if (treasures.size() == 2) {
-            int choice = Display::askChoice("Ecarter 1 = " + Display::cardLabel(*treasures[0])
-                                            + " ou 2 = " + Display::cardLabel(*treasures[1]) + " ? ", 1, 2);
+            int choice = Display::askChoice("Trash 1 = " + Display::cardLabel(*treasures[0])
+                                            + " or 2 = " + Display::cardLabel(*treasures[1]) + " ? ", 1, 2);
             stolen = std::move(treasures[choice - 1]);
             others.push_back(std::move(treasures[2 - choice])); // the other Treasure is simply discarded
         }
@@ -35,8 +35,8 @@ void Thief::effect(Player& player, Game& game) {
         for (std::unique_ptr<Card>& c : others) target->discardCard(std::move(c));
 
         if (stolen) {
-            if (Display::askChoice("Recuperer " + Display::cardLabel(*stolen) + " pour vous ? (1 = oui, 0 = non) : ", 0, 1) == 1) {
-                Display::showMessage(player.getName() + " recupere " + Display::cardLabel(*stolen));
+            if (Display::askChoice("Gain " + Display::cardLabel(*stolen) + " for yourself? (1 = yes, 0 = no) : ", 0, 1) == 1) {
+                Display::showMessage(player.getName() + " gains " + Display::cardLabel(*stolen));
                 player.gain(std::move(stolen));
             } else {
                 game.trashCard(std::move(stolen));
