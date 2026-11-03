@@ -173,7 +173,7 @@ int Player::countVictoryPoints() const {
             else totalVP += static_cast<VictoryCard*>(card.get())->getVictoryPoints();
         }
     }
-    totalVP += floor(nbGardens*0.1*deck.size());
+    totalVP += nbGardens*floor(0.1*deck.size());
     return totalVP; // TODO : add support for special cards that give victory points based on other conditions (e.g., Gardens, Duke, etc.)
 }
 
